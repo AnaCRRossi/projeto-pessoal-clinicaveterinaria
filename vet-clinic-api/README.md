@@ -51,7 +51,7 @@ vet-clinic-api
    ```
    npm start
    ```
-3. Acesse a API em `http://localhost:3000`.
+3. Acesse a API em `http://localhost:3000/api-docs/`.
 
 ## Funcionalidades
 - Registro e autenticação de usuários (médicos veterinários e donos de pets).
