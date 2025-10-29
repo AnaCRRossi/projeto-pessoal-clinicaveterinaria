@@ -1,0 +1,191 @@
+openapi: 3.0.0
+info:
+  title: Vet Clinic API
+  version: 1.0.0
+  description: API para acompanhamento do quadro clínico de pacientes de uma clínica veterinária.
+servers:
+  - url: http://localhost:3000
+paths:
+  /auth/register:
+    post:
+      summary: Registrar um novo usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                userType:
+                  type: string
+                  enum: [veterinario, dono]
+      responses:
+        '201':
+          description: Usuário registrado com sucesso
+        '400':
+          description: Dados inválidos
+  /auth/login:
+    post:
+      summary: Autenticar um usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login bem-sucedido
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '401':
+          description: Credenciais inválidas
+  /pets:
+    post:
+      summary: Registrar um novo pet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                species:
+                  type: string
+                breed:
+                  type: string
+                age:
+                  type: integer
+      responses:
+        '201':
+          description: Pet registrado com sucesso
+        '400':
+          description: Dados inválidos
+    get:
+      summary: Listar todos os pets
+      responses:
+        '200':
+          description: Lista de pets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                    name:
+                      type: string
+                    species:
+                      type: string
+                    breed:
+                      type: string
+                    age:
+                      type: integer
+  /pets/{id}:
+    get:
+      summary: Obter informações sobre um pet específico
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do pet
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Informações do pet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  name:
+                    type: string
+                  species:
+                    type: string
+                  breed:
+                    type: string
+                  age:
+                    type: integer
+        '404':
+          description: Pet não encontrado
+  /pets/{id}/consultations:
+    post:
+      summary: Registrar uma nova consulta para um pet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do pet
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date-time
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Consulta registrada com sucesso
+        '404':
+          description: Pet não encontrado
+        '400':
+          description: Dados inválidos
+  /pets/{id}/history:
+    get:
+      summary: Obter histórico de consultas de um pet
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID do pet
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Histórico de consultas
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    date:
+                      type: string
+                      format: date-time
+                    description:
+                      type: string
+        '404':
+          description: Pet não encontrado
